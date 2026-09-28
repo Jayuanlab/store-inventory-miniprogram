@@ -1,0 +1,22 @@
+node_modules/
+server/data/*.sqlite*
+server/data/before-erp-upgrade.json
+server/*.log
+server/backups/
+.env
+.env.*
+!.env.example
+outputs/qa/
+.tmp*/
+
+# Local business data and machine-specific settings
+server/data/
+project.private.config.json
+outputs/
+*.zip
+*.xls
+*.xlsx
+docs/inventory-alignment-report.md
+docs/real-inventory-data-model.md
+*.pem
+*.key

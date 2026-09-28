@@ -1,0 +1,13 @@
+<view class="page"><view class="page-head"><view><view class="page-title">号卡佣金</view><view class="subtle">{{canManage ? '门店号卡业务' : '我的号卡业务'}}</view></view></view>
+ <view class="error" wx:if="{{error && !selected}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <view class="surface"><view class="line" wx:for="{{rows}}" wx:key="id" data-id="{{item.id}}" bindtap="open">
+ <view class="row"><view class="grow item-name">{{item.productName}}</view><text class="badge {{item.outstanding > 0 ? 'pending' : 'muted'}}">待收 ¥{{item.outstandingText}}</text></view>
+ <view class="subtle">{{item.employeeName}} · {{item.carrier || '渠道未填写'}} · {{item.timeText}}</view><view class="mono">{{item.cardNo}}</view>
+ <view class="card-numbers"><view><view class="subtle">预计</view><text>¥{{item.expectedText}}</text></view><view><view class="subtle">已确认</view><text>¥{{item.confirmedText}}</text></view><view><view class="subtle">已到账</view><text class="primary">¥{{item.receivedText}}</text></view></view>
+ </view><view class="empty" wx:if="{{!rows.length}}">{{loading ? '正在读取' : '暂无号卡销售记录'}}</view></view>
+ <view class="sheet-backdrop" wx:if="{{selected}}" bindtap="close"><view class="sheet" catchtap="noop"><view class="page-head"><view class="page-title">{{selected.productName}}</view><button class="icon-btn" bindtap="close"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+ <view class="subtle">{{selected.employeeName}} · {{selected.cardNo}}</view>
+ <block wx:if="{{canManage}}"><view class="field"><text class="label">本次操作</text><picker range="{{actions}}" value="{{actionIndex}}" bindchange="action"><view class="picker-value">{{actions[actionIndex]}}</view></picker></view><view class="field-pair"><view class="field"><text class="label">本次金额（元）</text><input class="input" type="digit" value="{{amount}}" data-field="amount" bindinput="field"/></view><view class="field"><text class="label">收付款账户</text><picker range="{{accounts}}" bindchange="account"><view class="picker-value">{{account}}</view></picker></view></view><view class="field"><text class="label">结算批次或备注</text><input class="input" value="{{note}}" data-field="note" bindinput="field"/></view><view class="error" wx:if="{{error}}">{{error}}</view><button class="primary-btn" bindtap="save" disabled="{{submitting}}" loading="{{submitting}}">{{actions[actionIndex]}}</button></block>
+ <view class="section-title">结算记录</view><view class="row line" wx:for="{{selected.events}}" wx:key="id"><view class="grow"><view>{{item.label}}</view><view class="subtle">{{item.timeText}} {{item.note}}</view></view><text>¥{{item.amountText}}</text></view><view class="empty" wx:if="{{!selected.events.length}}">暂无结算记录</view>
+ </view></view>
+</view>

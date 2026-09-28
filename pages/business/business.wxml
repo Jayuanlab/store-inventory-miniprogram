@@ -1,0 +1,22 @@
+<view class="page">
+  <view class="business-head">
+    <view>
+      <view class="subtle light">业务菜单</view>
+      <view class="business-title">选择要处理的业务</view>
+    </view>
+  </view>
+
+  <view class="module-group" wx:for="{{modules}}" wx:key="group">
+    <view class="section-title">
+      <text>{{item.group}}</text>
+    </view>
+    <view class="module-grid">
+      <view class="card module-card" wx:for="{{item.items}}" wx:for-item="feature" wx:key="name" data-path="{{feature.path}}" data-name="{{feature.name}}" bindtap="openFeature">
+        <view class="module-icon">{{feature.icon}}</view>
+        <view class="module-name">{{feature.name}}</view>
+        <view class="module-desc">{{feature.desc}}</view>
+        <view class="tag {{feature.statusClass}}">{{feature.status}}</view>
+      </view>
+    </view>
+  </view>
+</view>

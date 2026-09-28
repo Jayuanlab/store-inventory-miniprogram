@@ -1,0 +1,17 @@
+.command-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 16px 0 4px; }
+.command-row button { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 11px 5px; font-size: 13px; }
+.supplier-page .segmented { gap: 0; justify-content: space-between; }
+.supplier-page .segment { font-size: 13px; }
+.entry-title { margin-top: 7px; }
+.date-range { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 42px; gap: 6px; align-items: center; margin: 10px 0 18px; }
+.date-range .picker-value { padding: 12px 5px; font-size: 12px; text-align: center; }
+.statement-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; }
+.statement-row text { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.statement-row text:not(:first-child) { text-align: right; }
+.due-row { display: flex; align-items: flex-start; gap: 6px; padding: 10px 0; border-bottom: 1px solid #edf0ee; }
+.due-row .subtle { overflow-wrap: anywhere; }
+.radio-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
+.radio-list label { display: flex; align-items: center; font-size: 13px; }
+.amount-input { font-size: 21px; min-height: 50px; }
+.note-input { min-height: 66px; }
+.actions .secondary-btn { display: flex; gap: 6px; align-items: center; justify-content: center; }

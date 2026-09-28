@@ -1,0 +1,27 @@
+<view class="page">
+ <view class="page-head"><view><view class="page-title">{{selected ? selected.name + '的工资' : (canViewAll ? '员工工资' : '我的工资')}}</view><button class="text-btn" wx:if="{{selected && canViewAll}}" bindtap="allEmployees">返回全员</button></view><picker mode="date" fields="month" value="{{month}}" bindchange="changeMonth"><view class="month-control">{{month}} <image class="small-icon" src="/assets/icons/calendar-days.svg"/></view></picker></view>
+ <view class="error" wx:if="{{error}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <block wx:if="{{!selected}}">
+  <view class="surface"><view class="summary-grid"><view><view class="metric-label">已核算应发合计</view><view class="metric-value">¥{{totals.totalText}}</view></view><view><view class="metric-label">销售提成合计</view><view class="metric-value primary">¥{{totals.commissionText}}</view></view></view></view>
+  <view class="section-title"><text>{{rows.length}} 位员工</text><text wx:if="{{totals.incomplete}}" class="badge pending">{{totals.incomplete}} 人待核算</text></view>
+  <view class="surface"><view class="line row" wx:for="{{rows}}" wx:key="employeeId" data-id="{{item.employeeId}}" bindtap="chooseEmployee">
+   <view class="grow"><view class="item-name">{{item.name}} <text class="subtle">{{item.role}}</text></view><view class="subtle">底薪 {{item.baseText}} · 提成 {{item.commissionText}}</view></view>
+   <view class="right"><view class="money">{{item.totalText}}</view><text class="badge {{item.status === 'draft' ? 'pending' : ''}}">{{item.statusText}}</text></view>
+  </view><view class="empty" wx:if="{{!rows.length}}">{{loading ? '正在读取工资' : '暂无工资档案'}}</view></view>
+ </block>
+ <block wx:else>
+  <view class="surface"><view class="line"><view class="row"><text class="subtle">应发工资</text><text class="badge {{selected.status === 'draft' ? 'pending' : ''}}">{{selected.statusText}}</text></view><view class="pay-total">{{selected.totalText}}</view></view>
+   <view class="row line"><text>基础工资</text><text class="money">{{selected.baseText}}</text></view>
+   <view class="row line"><text>按件提成</text><text>{{selected.pieceText}}</text></view>
+   <view class="row line"><text>按毛利提成</text><text>{{selected.profitText}}</text></view>
+   <view class="row line"><text>退货回冲</text><text class="negative">{{selected.adjustmentText}}</text></view>
+  </view>
+  <view wx:if="{{selected.pending}}" class="section-title"><text class="badge pending">{{selected.pending}} 笔提成待核算</text></view>
+  <view class="actions" wx:if="{{canConfirm && selected.status === 'draft'}}"><button class="primary-btn" bindtap="confirm" disabled="{{submitting || selected.total === null}}" loading="{{submitting}}">确认本月工资</button></view>
+  <view wx:if="{{caps.confirmPay && selected.status === 'confirmed'}}"><view class="field"><text class="label">发放账户</text><picker range="{{accounts}}" bindchange="accountChange"><view class="picker-value">{{account}}</view></picker></view><button class="primary-btn" bindtap="paid" disabled="{{submitting}}">记录已发放</button></view>
+  <view class="section-title">提成明细</view><view class="surface"><view class="line row" wx:for="{{entries}}" wx:key="id" bindtap="go" data-url="/pages/orders/orders?id={{item.orderId}}">
+   <view class="grow"><view class="item-name">{{item.productName}}</view><view class="subtle">{{item.kind === 'return' ? '退货回冲' : item.modeText}} · {{item.quantity}} 件 · {{item.timeText}}</view></view><view class="right money {{item.kind === 'return' ? 'negative' : 'primary'}}">{{item.amountText}}</view>
+  </view><view class="empty" wx:if="{{!entries.length}}">这个月暂无销售提成</view></view>
+ </block>
+ <view class="actions" wx:if="{{canManage}}"><button class="secondary-btn" bindtap="go" data-url="/pages/pay-settings/pay-settings">设置底薪与提成</button></view>
+</view>

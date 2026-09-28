@@ -1,0 +1,16 @@
+<view class="page login-page">
+  <image class="store-mark" src="/assets/icons/store.svg" />
+  <view class="page-title">聚友通信城</view><view class="subtle">门店进销存</view>
+  <view class="error" wx:if="{{error}}">{{error}}<button class="text-btn" bindtap="onShow">重新连接</button></view>
+  <view class="empty" wx:if="{{loading}}">正在连接门店</view>
+  <block wx:elif="{{localExperience}}">
+    <view class="section-title">本机体验账号</view>
+    <view class="surface">
+      <button class="login-row row line" wx:for="{{users}}" wx:key="id" data-id="{{item.id}}" bindtap="selectUser" disabled="{{submitting}}">
+        <view class="grow"><view class="item-name">{{item.name}}</view><view class="subtle">{{item.role}}</view></view>
+        <image class="small-icon" src="/assets/icons/chevron-right.svg" />
+      </button>
+    </view>
+  </block>
+  <button wx:else class="primary-btn" bindtap="wechatLogin" loading="{{submitting}}">微信登录</button>
+</view>

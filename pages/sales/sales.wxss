@@ -1,0 +1,1 @@
+.search-bar { align-items: flex-start; gap: 8px; }.search-bar .icon-btn { height: 46px; width: 46px; }.search-bar .search { min-width: 0; }.checkout { margin-top: 26px; }.checkout .row { margin-bottom: 14px; }.pay-amount { font-size: 27px; font-weight: 650; }.line>.icon-btn { width: 32px; height: 36px; background: transparent; padding: 6px; }

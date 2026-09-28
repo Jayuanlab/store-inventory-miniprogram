@@ -1,0 +1,1 @@
+.card-numbers { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 12px; }.card-numbers text { font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }

@@ -1,0 +1,6 @@
+<view class="page"><view class="page-head"><view class="page-title">期初建账</view><text class="badge muted">{{status.locked ? '已锁定' : '可建账'}}</text></view>
+ <view class="error" wx:if="{{error}}">{{error}}</view>
+ <view class="surface"><view class="row line"><text>当前商品</text><text>{{status.productCount || 0}} 个</text></view><view class="row line"><text>库存记录</text><text>{{status.stockCount || 0}} 条</text></view></view>
+ <view class="empty" wx:if="{{status.locked}}">已有业务记录，期初建账已锁定。</view><view class="actions" wx:else><button class="secondary-btn" bindtap="chooseExcel" disabled="{{loading || submitting}}">选择 Excel 库存表</button></view>
+ <block wx:if="{{preview}}"><view class="section-title">导入核对</view><view class="surface"><view class="line"><view class="item-name">{{preview.source}}</view><view class="subtle">{{preview.productCount}} 个商品 · 总数量 {{preview.totalQuantity}}</view><view class="money">库存成本 ¥{{preview.stockValueText}}</view></view><view class="line row" wx:for="{{preview.rows}}" wx:key="skuId"><view class="grow item-name">{{item.name}}</view><text>{{item.quantity}} {{item.unit}}</text></view></view><view class="actions"><button class="primary-btn" bindtap="commit" disabled="{{submitting}}" loading="{{submitting}}">核对完成，建立期初</button></view></block>
+</view>

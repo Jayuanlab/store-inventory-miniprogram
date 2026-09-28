@@ -1,0 +1,14 @@
+<view class="page">
+ <view class="page-head"><view><view class="page-title">{{user.name}}</view><view class="subtle">{{user.role}} · 聚友通信城</view></view><image class="profile-icon" src="/assets/icons/contact-round.svg"/></view>
+ <view class="error" wx:if="{{error}}">{{error}}</view>
+ <view class="section-title">工资与人员</view><view class="surface">
+  <view class="menu-item" bindtap="go" data-url="/pages/payroll/payroll"><image class="icon" src="/assets/icons/wallet.svg"/><text class="grow">{{caps.viewAllPay ? '全员工资' : '我的工资'}}</text><image class="small-icon" src="/assets/icons/chevron-right.svg"/></view>
+  <view class="menu-item" wx:if="{{caps.managePay}}" bindtap="go" data-url="/pages/pay-settings/pay-settings"><image class="icon" src="/assets/icons/sliders-horizontal.svg"/><text class="grow">底薪与提成设置</text><image class="small-icon" src="/assets/icons/chevron-right.svg"/></view>
+ </view>
+ <view class="section-title" wx:if="{{caps.manageProducts || caps.opening}}">门店资料</view><view class="surface" wx:if="{{caps.manageProducts || caps.opening}}">
+  <view class="menu-item" wx:if="{{caps.manageProducts}}" bindtap="go" data-url="/pages/products/products"><image class="icon" src="/assets/icons/package.svg"/><text class="grow">商品资料</text><image class="small-icon" src="/assets/icons/chevron-right.svg"/></view>
+  <view class="menu-item" wx:if="{{caps.opening}}" bindtap="go" data-url="/pages/opening-balance/opening-balance"><image class="icon" src="/assets/icons/file-spreadsheet.svg"/><text class="grow">期初建账</text><image class="small-icon" src="/assets/icons/chevron-right.svg"/></view>
+ </view>
+ <view class="section-title">门店成员</view><view class="surface"><view class="row line" wx:for="{{staff}}" wx:key="id"><text>{{item.name}}</text><text class="badge muted">{{item.role}}</text></view></view>
+ <view class="actions"><button class="secondary-btn" bindtap="logout">退出登录</button></view>
+</view>

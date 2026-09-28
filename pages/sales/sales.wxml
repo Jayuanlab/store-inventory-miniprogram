@@ -1,0 +1,28 @@
+<view class="page">
+ <view class="page-head"><view><view class="page-title">销售开单</view><view class="subtle">{{salespersonName}}</view></view><button class="text-btn" bindtap="go" data-url="/pages/orders/orders">查单</button></view>
+ <view class="error" wx:if="{{error && !editor}}">{{error}}<button class="text-btn" bindtap="reload">刷新库存</button></view>
+ <view class="empty" wx:if="{{!caps.sell && !loading}}">当前账号没有销售权限</view>
+ <block wx:else>
+ <view class="row search-bar"><view class="search grow"><image class="icon" src="/assets/icons/search.svg"/><input value="{{keyword}}" bindinput="changeKeyword" placeholder="搜索商品、型号、编号或串码" confirm-type="search"/></view><button class="icon-btn" bindtap="scan" aria-label="扫码选择商品"><image class="icon" src="/assets/icons/scan-line.svg"/></button></view>
+ <view class="surface" wx:if="{{keyword}}"><view class="line" wx:for="{{results}}" wx:key="stockKey" data-key="{{item.stockKey}}" bindtap="choose"><view class="item-name">{{item.name}}</view><view class="subtle">{{item.stockManaged === false ? '服务商品' : '可售 ' + item.quantity + ' ' + item.unit}} · 售价 ¥{{item.salePrice}}</view></view><view class="empty" wx:if="{{!results.length}}">没有匹配商品</view></view>
+ <view class="section-title">本次销售 <text class="subtle">{{cart.length}} 项</text></view>
+ <view class="surface"><view class="line row" wx:for="{{cart}}" wx:key="localKey"><view class="grow" data-key="{{item.localKey}}" bindtap="edit"><view class="item-name">{{item.name}}</view><view class="subtle">¥{{item.salePrice}} × {{item.quantity}} <text wx:if="{{item.materials.length}}">· 耗材 {{item.materials.length}} 项</text></view><view class="mono" wx:if="{{item.serialNo}}">{{item.serialNo}}</view></view><view class="money">¥{{item.amountText}}</view><button class="icon-btn" data-key="{{item.localKey}}" bindtap="remove" aria-label="移除商品"><image class="small-icon" src="/assets/icons/trash-2.svg"/></button></view><view class="empty" wx:if="{{!cart.length}}">搜索商品或扫码开始开单</view></view>
+ <view class="field"><text class="label">收款方式</text><picker range="{{accounts}}" bindchange="account"><view class="picker-value">{{account}}</view></picker></view>
+ <view class="field" wx:if="{{caps.allSales}}"><text class="label">销售归属</text><picker range="{{staffNames}}" bindchange="seller"><view class="picker-value">{{salespersonName}}</view></picker></view>
+ <view class="checkout"><view class="row"><text class="subtle">应收合计</text><text class="pay-amount">¥{{totalText}}</text></view><button class="primary-btn" bindtap="submit" disabled="{{submitting || !cart.length}}" loading="{{submitting}}">确认收款并开单</button></view>
+ </block>
+ <view class="sheet-backdrop" wx:if="{{editor}}" bindtap="close"><view class="sheet" catchtap="noop">
+ <view class="page-head"><view class="page-title">{{editor.name}}</view><button class="icon-btn" bindtap="close"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+ <view class="field-pair"><view class="field"><text class="label">实际售价（元）</text><input class="input" type="digit" value="{{editor.salePrice}}" data-field="salePrice" bindinput="field"/></view><view class="field"><text class="label">数量</text><input class="input" type="number" value="{{editor.quantity}}" data-field="quantity" bindinput="field" disabled="{{editor.trackSerial}}"/></view></view>
+ <view class="field" wx:if="{{editor.trackSerial}}"><text class="label">本件串码</text><picker range="{{editor.serialOptions}}" bindchange="serial"><view class="picker-value">{{editor.serialNo || '选择串码'}}</view></picker></view>
+ <block wx:if="{{!editor.stockManaged}}">
+  <view class="section-title">本次总耗材</view>
+  <view class="row"><picker class="grow" range="{{materialNames}}" value="{{materialIndex}}" bindchange="material"><view class="picker-value">{{materialNames[materialIndex] || '没有可用耗材'}}</view></picker><button class="icon-btn" bindtap="addMaterial" aria-label="添加耗材"><image class="icon" src="/assets/icons/plus.svg"/></button></view>
+  <view class="row line" wx:for="{{editor.materials}}" wx:key="skuId"><view class="grow">{{item.name}} × {{item.quantity}}</view><button class="text-btn" data-id="{{item.skuId}}" bindtap="removeMaterial">移除</button></view>
+  <view class="row field" wx:if="{{!editor.materials.length}}"><text>本次无耗材</text><switch checked="{{editor.noMaterials}}" color="#147957" bindchange="noMaterials"/></view>
+ </block>
+ <block wx:if="{{editor.type === '号卡'}}"><view class="field-pair"><view class="field"><text class="label">运营商或渠道</text><input class="input" value="{{editor.carrier}}" data-field="carrier" bindinput="field"/></view><view class="field"><text class="label">预计佣金（元）</text><input class="input" type="digit" value="{{editor.expected}}" data-field="expected" bindinput="field" placeholder="未确定可留空"/></view></view><view class="field"><text class="label">手机号或卡号</text><input class="input" value="{{editor.cardNo}}" data-field="cardNo" bindinput="field"/></view></block>
+ <view class="error sheet-error" wx:if="{{error}}">{{error}}</view>
+ <view class="actions"><button class="primary-btn" bindtap="add">加入本次销售</button></view>
+ </view></view>
+</view>

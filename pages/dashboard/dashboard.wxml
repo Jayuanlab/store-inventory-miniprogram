@@ -1,0 +1,31 @@
+<view class="page">
+  <view class="page-head"><view><view class="page-title">聚友通信城</view><view class="subtle">{{user.name}} · {{user.role}}</view></view><view class="subtle">{{date}}</view></view>
+  <view class="error" wx:if="{{error}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+  <view class="surface">
+    <view class="summary-grid">
+      <view><view class="metric-label">{{caps.allSales ? '今日净销售' : '我的净销售'}}</view><view class="metric-value">¥{{summary.netSales || '0.00'}}</view></view>
+      <view><view class="metric-label">销售收款</view><view class="metric-value primary">¥{{summary.receivedAmount || '0.00'}}</view></view>
+      <view wx:if="{{caps.profit}}"><view class="metric-label">销售毛利</view><view class="money">¥{{summary.grossProfit}}</view></view>
+      <view><view class="metric-label">销售单数</view><view class="money">{{summary.orderCount || 0}}</view></view>
+    </view>
+  </view>
+  <view class="section-title">日常业务</view>
+  <view class="quick-grid">
+    <button wx:if="{{caps.sell}}" bindtap="sales"><image class="icon" src="/assets/icons/scan-line.svg"/>销售开单</button>
+    <button bindtap="inventory"><image class="icon" src="/assets/icons/package.svg"/>库存查询</button>
+    <button wx:if="{{caps.purchase}}" bindtap="go" data-url="/pages/purchase/purchase"><image class="icon" src="/assets/icons/package-plus.svg"/>采购入库</button>
+    <button bindtap="go" data-url="/pages/orders/orders"><image class="icon" src="/assets/icons/receipt-text.svg"/>销售单据</button>
+    <button bindtap="go" data-url="/pages/payroll/payroll"><image class="icon" src="/assets/icons/wallet.svg"/>{{caps.viewAllPay ? '员工工资' : '我的工资'}}</button>
+    <button bindtap="go" data-url="/pages/cards/cards"><image class="icon" src="/assets/icons/contact-round.svg"/>号卡佣金</button>
+    <button wx:if="{{caps.finance}}" bindtap="go" data-url="/pages/finance/finance"><image class="icon" src="/assets/icons/landmark.svg"/>收支账款</button>
+    <button wx:if="{{caps.supplierView}}" bindtap="go" data-url="/pages/suppliers/suppliers"><image class="icon" src="/assets/icons/contact-round.svg"/>供应商往来</button>
+    <button bindtap="go" data-url="/pages/daily-report/daily-report"><image class="icon" src="/assets/icons/chart-no-axes-combined.svg"/>每日经营</button>
+  </view>
+  <view class="section-title"><text>今日销售</text><button class="text-btn" bindtap="go" data-url="/pages/orders/orders">全部单据</button></view>
+  <view class="surface">
+    <view class="row line" wx:for="{{orders}}" wx:key="id" bindtap="go" data-url="/pages/orders/orders?id={{item.id}}">
+      <view class="grow"><view class="item-name">{{item.names}}</view><view class="subtle">{{item.salesperson || item.operator}} · {{item.timeText}}</view></view><view class="right money">¥{{item.amountText}}</view>
+    </view>
+    <view class="empty" wx:if="{{!orders.length}}">{{loading ? '正在读取' : '今天还没有销售单'}}</view>
+  </view>
+</view>

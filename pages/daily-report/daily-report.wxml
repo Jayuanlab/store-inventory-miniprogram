@@ -1,0 +1,15 @@
+<view class="page"><view class="page-head"><view class="page-title">每日经营</view><picker mode="date" value="{{date}}" bindchange="changeDate"><view class="primary">{{date}} ⌄</view></picker></view>
+ <view class="error" wx:if="{{error}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <view class="surface"><view class="summary-grid">
+ <view><view class="metric-label">销售净额</view><view class="metric-value">¥{{summary.netSales}}</view></view>
+ <view wx:if="{{canViewProfit}}"><view class="metric-label">销售毛利</view><view class="metric-value primary">¥{{summary.grossProfit}}</view></view>
+ <view><view class="metric-label">销售收款</view><view class="money">¥{{summary.receivedAmount}}</view></view>
+ <view><view class="metric-label">实际退款</view><view class="money negative">¥{{summary.refundAmount}}</view></view>
+ <view wx:if="{{caps.finance}}"><view class="metric-label">佣金净到账</view><view class="money blue">¥{{summary.carrierReceived}}</view></view>
+ <view wx:if="{{caps.finance}}"><view class="metric-label">费用支出</view><view class="money">¥{{summary.expenseAmount}}</view></view>
+ </view></view>
+ <view class="section-title" wx:if="{{caps.supplierView || canViewProfit}}">采购与成本调整</view><view class="surface" wx:if="{{caps.supplierView || canViewProfit}}"><view class="line row" wx:if="{{canViewProfit}}"><text>已售成本调整带来的毛利</text><text class="right money blue">¥{{summary.costAdjustmentProfit}}</text></view><view class="line row" wx:if="{{canViewProfit}}"><text>含调整销售毛利</text><text class="right money">¥{{summary.adjustedGrossProfit}}</text></view><view class="line row" wx:if="{{canViewProfit}}"><text>采购退货价差</text><text class="right">¥{{summary.purchaseReturnDifference}}</text></view><view class="line row" wx:if="{{caps.supplierView}}"><text>实付供应商</text><text class="right">¥{{summary.supplierPaid}}</text></view><view class="line row" wx:if="{{caps.supplierView}}"><text>供应商实退</text><text class="right">¥{{summary.supplierRefund}}</text></view></view>
+ <view class="section-title">品类销售</view><view class="surface"><view class="line row" wx:for="{{categoryStats}}" wx:key="category"><view><view class="item-name">{{item.category}}</view><view class="subtle">净售 {{item.quantity}} 件/项</view></view><view class="right"><view class="money">¥{{item.salesText}}</view><view class="subtle" wx:if="{{canViewProfit}}">毛利 ¥{{item.profitText}}</view></view></view><view class="empty" wx:if="{{!categoryStats.length}}">当天暂无销售</view></view>
+ <view class="section-title">收款方式净额</view><view class="surface"><view class="line row" wx:for="{{paymentStats}}" wx:key="paymentMethod"><text>{{item.paymentMethod}}</text><text class="money">¥{{item.amountText}}</text></view><view class="empty" wx:if="{{!paymentStats.length}}">当天暂无收退款</view></view>
+ <view class="section-title">员工销售</view><view class="surface"><view class="line row" wx:for="{{staffStats}}" wx:key="id"><view><view class="item-name">{{item.name}}</view><view class="subtle">{{item.orderCount}} 单</view></view><text class="money">¥{{item.salesText}}</text></view></view>
+</view>

@@ -1,0 +1,6 @@
+.balance-band { margin-bottom: 20px; }
+.supplier-row { padding: 18px 0; border-bottom: 1px solid #e8eeea; }
+.supplier-row:last-child { border: 0; }
+.supplier-amounts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 12px 0 6px; }
+.supplier-amounts .money { margin-top: 4px; font-size: 17px; }
+.empty-icon { width: 32px; height: 32px; margin-bottom: 12px; opacity: .55; }

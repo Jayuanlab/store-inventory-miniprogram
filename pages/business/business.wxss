@@ -1,0 +1,64 @@
+.business-head {
+  min-height: 110rpx;
+  padding: 20rpx;
+  border: 1rpx solid #dddddd;
+  border-radius: 4rpx;
+  background: #ffffff;
+  color: #222222;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.light {
+  color: #777777;
+}
+
+.business-title {
+  margin-top: 8rpx;
+  font-size: 32rpx;
+  line-height: 1.28;
+  font-weight: 700;
+}
+
+.module-group {
+  margin-top: 8rpx;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+}
+
+.module-card {
+  min-height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.module-icon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 4rpx;
+  background: #f0f0f0;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.module-name {
+  color: #222222;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.module-desc {
+  min-height: 64rpx;
+  color: #777777;
+  font-size: 23rpx;
+  line-height: 1.4;
+}

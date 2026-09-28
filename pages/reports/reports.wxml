@@ -1,0 +1,66 @@
+<view class="page">
+  <view class="report-head">
+    <view>
+      <view class="subtle light">老板报表</view>
+      <view class="report-title">销售、毛利、商品和员工业绩</view>
+    </view>
+  </view>
+
+  <view class="metrics-grid">
+    <view class="card metric-card">
+      <view class="subtle">销售额</view>
+      <view class="metric-value">¥{{summary.totalSales}}</view>
+    </view>
+    <view class="card metric-card">
+      <view class="subtle">毛利</view>
+      <view class="metric-value profit">¥{{summary.totalProfit}}</view>
+    </view>
+    <view class="card metric-card">
+      <view class="subtle">销售单数</view>
+      <view class="metric-value">{{summary.orderCount}}</view>
+    </view>
+    <view class="card metric-card">
+      <view class="subtle">客单价</view>
+      <view class="metric-value">¥{{summary.avgOrderAmount}}</view>
+    </view>
+  </view>
+
+  <view class="section-title">
+    <text>商品销售排行</text>
+  </view>
+  <view class="list">
+    <view class="card rank-row" wx:for="{{productRows}}" wx:key="skuId">
+      <view>
+        <view class="item-name">{{item.name}}</view>
+        <view class="subtle">{{item.type}} · 已售 {{item.soldQuantity}}</view>
+      </view>
+      <view class="amount">¥{{item.salesAmount}}</view>
+    </view>
+  </view>
+
+  <view class="section-title">
+    <text>员工业绩</text>
+  </view>
+  <view class="list">
+    <view class="card rank-row" wx:for="{{staffRows}}" wx:key="id">
+      <view>
+        <view class="item-name">{{item.name}}</view>
+        <view class="subtle">{{item.role}} · {{item.orderCount}} 单 · 毛利 ¥{{item.profit}}</view>
+      </view>
+      <view class="amount">¥{{item.salesAmount}}</view>
+    </view>
+  </view>
+
+  <view class="section-title">
+    <text>最近销售单</text>
+  </view>
+  <view class="list">
+    <view class="card order-row" wx:for="{{recentSales}}" wx:key="id">
+      <view>
+        <view class="item-name">{{item.id}}</view>
+        <view class="subtle">{{item.operator}} · {{item.paymentMethod}} · {{item.createdAtText}}</view>
+      </view>
+      <view class="amount">¥{{item.amount}}</view>
+    </view>
+  </view>
+</view>

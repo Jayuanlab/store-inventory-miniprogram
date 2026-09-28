@@ -1,0 +1,24 @@
+<view class="page">
+ <view class="page-head"><view class="page-title">底薪与提成</view></view>
+ <view class="segmented"><view class="segment {{tab === 'rules' ? 'active' : ''}}" data-tab="rules" bindtap="changeTab">商品规则</view><view class="segment {{tab === 'salary' ? 'active' : ''}}" data-tab="salary" bindtap="changeTab">员工底薪</view><view class="segment {{tab === 'pending' ? 'active' : ''}}" data-tab="pending" bindtap="changeTab">待核算 {{pending.length || ''}}</view></view>
+ <view class="error" wx:if="{{error && !editor}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <block wx:if="{{tab === 'rules'}}">
+  <view class="search"><image class="icon" src="/assets/icons/search.svg"/><input placeholder="搜索商品名称、编号" value="{{keyword}}" bindinput="search"/></view>
+  <view class="surface"><view class="line row" wx:for="{{filtered}}" wx:key="skuId" data-id="{{item.skuId}}" bindtap="editRule"><view class="grow"><view class="item-name">{{item.name}}</view><view class="subtle">{{item.type}} · {{item.ruleText}}</view></view><image class="icon" src="/assets/icons/pencil.svg"/></view><view class="empty" wx:if="{{!filtered.length}}">{{loading ? '正在读取' : '没有匹配商品'}}</view></view>
+ </block>
+ <block wx:elif="{{tab === 'salary'}}">
+  <view class="field"><text class="label">查看月份</text><picker mode="date" fields="month" value="{{month}}" bindchange="monthChange"><view class="picker-value">{{month}}</view></picker></view>
+  <view class="surface"><view class="line row" wx:for="{{staff}}" wx:key="id" data-id="{{item.id}}" bindtap="editSalary"><view class="grow"><view class="item-name">{{item.name}}</view><view class="subtle">{{item.role}}</view></view><view class="right"><view class="money">{{item.salaryText}}</view><view class="subtle" wx:if="{{item.salary}}">{{item.salary.effectiveMonth}} 起</view></view><image class="small-icon" src="/assets/icons/pencil.svg"/></view></view>
+ </block>
+ <block wx:else>
+  <view class="surface"><view class="line row" wx:for="{{pending}}" wx:key="id" data-id="{{item.id}}" bindtap="resolve"><view class="grow"><view class="item-name">{{item.productName}}</view><view class="subtle">{{item.employeeName}} · {{item.month}} · {{item.quantity}} 件</view></view><text class="primary">补录提成</text></view><view class="empty" wx:if="{{!pending.length}}">没有待核算提成</view></view>
+ </block>
+ <view class="sheet-backdrop" wx:if="{{editor}}" bindtap="close"><view class="sheet" catchtap="noop">
+  <view class="page-head"><view class="page-title">{{editor.title}}</view><button class="icon-btn" bindtap="close"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+  <block wx:if="{{editor.kind !== 'salary'}}"><view class="field"><text class="label">提成方式</text><picker range="{{modes}}" value="{{editor.modeIndex}}" bindchange="changeMode"><view class="picker-value">{{modes[editor.modeIndex]}}</view></picker></view></block>
+  <view class="field" wx:if="{{editor.kind === 'salary' || editor.modeIndex !== 2}}"><text class="label">{{editor.kind === 'salary' ? '月基础工资（元）' : (editor.modeIndex === 0 ? '每件提成（元）' : '毛利提成比例（%）')}}</text><input class="input" type="digit" value="{{editor.value}}" bindinput="changeValue" placeholder="请输入金额或比例"/></view>
+  <view class="field" wx:if="{{editor.kind === 'salary'}}"><text class="label">生效月份</text><picker mode="date" fields="month" value="{{editor.effectiveMonth}}" bindchange="effectiveMonth"><view class="picker-value">{{editor.effectiveMonth}}</view></picker></view>
+  <view class="subtle" wx:if="{{editor.kind === 'rule'}}">保存后对新销售生效，历史提成保持原规则。</view>
+  <view class="error sheet-error" wx:if="{{error}}">{{error}}</view><view class="actions"><button class="primary-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="save">{{editor.kind === 'resolve' ? '核定这笔提成' : '保存设置'}}</button></view>
+ </view></view>
+</view>

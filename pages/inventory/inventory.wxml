@@ -1,0 +1,32 @@
+<view class="page">
+ <view class="page-head"><view class="page-title">库存</view><button class="text-btn" wx:if="{{caps.manageProducts}}" bindtap="go" data-url="/pages/products/products">商品资料</button></view>
+ <view class="error" wx:if="{{error && !detail}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <view class="search"><image class="icon" src="/assets/icons/search.svg"/><input placeholder="搜索名称、编号、分类或串码" value="{{keyword}}" bindinput="search"/><button class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch" aria-label="清空搜索"><image class="small-icon" src="/assets/icons/x.svg"/></button></view>
+ <view class="category-filters">
+   <view class="category-filter" wx:for="{{categoryTitles}}" wx:key="*this">
+     <text class="category-label">{{item}}</text>
+     <picker class="category-picker {{index > 0 && categoryValues[index - 1] === null ? 'disabled' : ''}}" range="{{categoryOptions[index]}}" range-key="label" value="{{categoryIndices[index]}}" data-level="{{index}}" bindchange="category" disabled="{{index > 0 && categoryValues[index - 1] === null}}">
+       <view class="category-value"><text class="grow">{{categoryOptions[index][categoryIndices[index]].label}}</text><image class="small-icon picker-chevron" src="/assets/icons/chevron-right.svg"/></view>
+     </picker>
+   </view>
+ </view>
+ <view class="row filter-summary"><text class="subtle">{{itemCount}} 项库存 · {{groupCount}} 个分类</text><button class="text-btn" wx:if="{{hasCategoryFilter}}" bindtap="resetCategories">重置分类</button></view>
+ <view class="inventory-group" wx:for="{{groups}}" wx:for-item="group" wx:key="key">
+   <view class="classification-heading"><text class="grow">{{group.pathText}}</text><text class="subtle group-count">{{group.items.length}} 项</text></view>
+   <view class="surface">
+     <view class="line row stock-row" wx:for="{{group.items}}" wx:key="stockKey" data-key="{{item.stockKey}}" bindtap="open">
+       <view class="grow"><view class="item-name">{{item.name}}</view><view class="subtle" wx:if="{{item.spec}}">{{item.spec}}</view><view class="subtle stock-code">{{item.externalCode}}</view><view class="subtle">{{item.warehouseName}}<text wx:if="{{caps.cost}}"> · 均价 ¥{{item.costText}}</text></view></view>
+       <view class="right"><view class="stock-quantity">{{item.quantity}} <text class="subtle">{{item.unit}}</text></view><text class="badge muted">{{item.trackSerial ? '串码库存' : '数量库存'}}</text></view>
+     </view>
+   </view>
+ </view>
+ <view class="empty" wx:if="{{itemCount === 0 && !error}}">{{loading ? '正在读取库存' : hasCategoryFilter || keyword ? '没有匹配库存' : '暂无库存记录'}}</view>
+ <view class="sheet-backdrop" wx:if="{{detail}}" bindtap="close"><view class="sheet" catchtap="noop"><view class="page-head"><view class="grow"><view class="page-title">{{detail.name}}</view><view class="subtle detail-path">{{detail.pathText}}</view></view><button class="icon-btn" bindtap="close" aria-label="关闭库存详情"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+ <view class="row line"><text>账面数量</text><text class="money">{{detail.quantity}} {{detail.unit}}</text></view>
+ <view class="row line" wx:if="{{detail.spec}}"><text class="subtle">规格</text><text class="grow right">{{detail.spec}}</text></view>
+ <view class="row line" wx:if="{{caps.cost}}"><text class="subtle">成本均价</text><text>¥{{detail.costText}}</text></view>
+ <view class="mono subtle detail-code">{{detail.externalCode}}</view>
+ <view class="line row" wx:for="{{detail.serials}}" wx:key="no"><text class="mono grow">{{item.no}}</text><text class="badge muted">{{item.status}}</text></view>
+ <block wx:if="{{caps.stocktake && !detail.trackSerial}}"><view class="section-title">数量盘点</view><view class="field"><text class="label">实盘数量</text><input class="input" type="number" value="{{actual}}" bindinput="actual"/></view><view class="field"><text class="label">差异或盘点说明</text><input class="input" value="{{reason}}" bindinput="reason"/></view><view class="error" wx:if="{{error}}">{{error}}</view><button class="primary-btn" bindtap="count" disabled="{{submitting}}" loading="{{submitting}}">确认盘点</button></block>
+ </view></view>
+</view>

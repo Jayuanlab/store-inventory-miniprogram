@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/dashboard/dashboard",
+    "pages/sales/sales",
+    "pages/inventory/inventory",
+    "pages/profile/profile",
+    "pages/login/login",
+    "pages/orders/orders",
+    "pages/payroll/payroll",
+    "pages/pay-settings/pay-settings",
+    "pages/products/products",
+    "pages/cards/cards",
+    "pages/opening-balance/opening-balance",
+    "pages/purchase/purchase",
+    "pages/finance/finance",
+    "pages/daily-report/daily-report",
+    "pages/suppliers/suppliers",
+    "pages/supplier-detail/supplier-detail",
+    "pages/supplier-adjustment/supplier-adjustment"
+  ],
+  "window": {
+    "navigationBarTitleText": "门店进销存",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#667085",
+    "selectedColor": "#147957",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/sales/sales",
+        "text": "开单"
+      },
+      {
+        "pagePath": "pages/inventory/inventory",
+        "text": "库存"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

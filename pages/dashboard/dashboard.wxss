@@ -1,0 +1,1 @@
+.quick-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }.quick-grid button { display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; margin: 0; min-height: 54px; padding: 12px; background: #fff; border: 1px solid #e0e7e2; font-size: 14px; text-align: left; }

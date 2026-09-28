@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="page-head"><view class="page-title">供应商往来</view><button class="icon-btn" aria-label="新增供应商" bindtap="add" wx:if="{{caps.purchase}}"><image class="icon" src="/assets/icons/plus.svg"/></button></view>
+  <view class="error" wx:if="{{error && !editor}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+  <view class="surface balance-band"><view class="summary-grid">
+    <view><view class="metric-label">我待付货款</view><view class="money negative">¥{{totals.payable || '0.00'}}</view></view>
+    <view><view class="metric-label">对方应退 / 应付</view><view class="money blue">¥{{totals.cash || '0.00'}}</view></view>
+    <view><view class="metric-label">预付货款余额</view><view class="money">¥{{totals.advance || '0.00'}}</view></view>
+    <view><view class="metric-label">仅抵货款额度</view><view class="money">¥{{totals.credit || '0.00'}}</view></view>
+  </view></view>
+  <view class="search"><image class="icon" src="/assets/icons/search.svg"/><input value="{{keyword}}" bindinput="search" placeholder="搜索供应商、联系人" confirm-type="search"/></view>
+  <view class="surface">
+    <view class="supplier-row" wx:for="{{rows}}" wx:key="id" data-id="{{item.id}}" bindtap="open">
+      <view class="row"><view class="item-name grow">{{item.name}}</view><image class="small-icon" src="/assets/icons/chevron-right.svg"/></view>
+      <view class="subtle" wx:if="{{item.contact}}">{{item.contact}}</view>
+      <view class="supplier-amounts"><view><text class="subtle">我待付</text><view class="money negative">¥{{item.payableText}}</view></view><view><text class="subtle">对方应退</text><view class="money blue">¥{{item.cashText}}</view></view></view>
+      <view class="subtle" wx:if="{{item.advance || item.credit}}">预付 ¥{{item.advanceText}} · 仅抵货款 ¥{{item.creditText}}</view>
+    </view>
+    <view class="empty" wx:if="{{!rows.length}}"><image class="empty-icon" src="/assets/icons/contact-round.svg"/><view>{{loading ? '正在读取供应商' : keyword ? '没有匹配的供应商' : '尚未建立供应商档案'}}</view><button class="text-btn" bindtap="add" wx:if="{{!keyword && !loading && caps.purchase}}">新增供应商</button></view>
+  </view>
+</view>
+<view class="sheet-backdrop" wx:if="{{editor}}" bindtap="close"><view class="sheet" catchtap="noop">
+  <view class="page-head"><view class="page-title">新增供应商</view><button class="icon-btn" bindtap="close" aria-label="关闭"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+  <view class="field"><text class="label">供应商 / 结算主体名称</text><input class="input" value="{{editor.name}}" data-field="name" bindinput="field" maxlength="100"/></view>
+  <view class="field"><text class="label">联系人及电话</text><input class="input" value="{{editor.contact}}" data-field="contact" bindinput="field" maxlength="200"/></view>
+  <view class="field"><text class="label">结算约定（选填）</text><textarea class="input" value="{{editor.note}}" data-field="note" bindinput="field" maxlength="1000" auto-height/></view>
+  <view class="error" wx:if="{{error}}">{{error}}</view><button class="primary-btn" bindtap="save" loading="{{submitting}}" disabled="{{submitting}}">保存供应商</button>
+</view></view>

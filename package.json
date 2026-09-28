@@ -1,0 +1,27 @@
+{
+  "name": "store-inventory-miniprogram-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "店铺内部进销存微信小程序 Demo",
+  "scripts": {
+    "check": "node scripts/check-json.js",
+    "server": "node --env-file-if-exists=server/.env server/src/index.js",
+    "server:test": "node --test server/src/erp-test.js server/src/supplier-test.js",
+    "pages:test": "node scripts/smoke-miniprogram-pages.js",
+    "inventory:test": "node scripts/test-inventory-page.js",
+    "suppliers:test": "node scripts/test-supplier-pages.js",
+    "import:test": "node scripts/test-opening-balance-upload.js",
+    "wechat:check": "node scripts/check-miniprogram.js",
+    "wechat:qa": "node scripts/qa-wechat.js",
+    "suppliers:qa": "node scripts/qa-suppliers-wechat.js",
+    "backup": "node --env-file-if-exists=server/.env scripts/backup-store.js"
+  },
+  "dependencies": {
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.41.0",
+    "miniprogram-automator": "^0.12.1",
+    "prettier": "^3.9.6"
+  }
+}

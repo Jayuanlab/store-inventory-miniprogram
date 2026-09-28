@@ -1,0 +1,1 @@
+.month-control { display: flex; align-items: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #dbe3dd; border-radius: 6px; font-size: 13px; white-space: nowrap; }.pay-total { font-size: 30px; font-weight: 650; padding: 14px 0 3px; overflow-wrap: anywhere; }.line .badge { margin-top: 5px; }

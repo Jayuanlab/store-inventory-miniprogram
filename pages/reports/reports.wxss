@@ -1,0 +1,57 @@
+.report-head {
+  min-height: 110rpx;
+  padding: 20rpx;
+  border-radius: 4rpx;
+  border: 1rpx solid #dddddd;
+  background: #ffffff;
+  color: #222222;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.light {
+  color: #777777;
+}
+
+.report-title {
+  margin-top: 8rpx;
+  font-size: 30rpx;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.metric-card {
+  min-height: 130rpx;
+}
+
+.profit,
+.amount {
+  color: #1677ff;
+}
+
+.rank-row,
+.order-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.item-name {
+  color: #222222;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.amount {
+  font-weight: 700;
+  white-space: nowrap;
+}

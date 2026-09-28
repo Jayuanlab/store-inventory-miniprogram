@@ -1,0 +1,6 @@
+.radio-list { display: flex; flex-wrap: wrap; gap: 14px; }
+.radio-list label, .radio-stack label { display: flex; align-items: center; min-height: 40px; font-size: 13px; }
+.radio-stack { display: block; }
+.serial-row { display: flex; gap: 8px; padding: 10px 0; align-items: center; border-bottom: 1px solid #e4ebe6; }
+.note-input { min-height: 68px; }
+.surface { margin-top: 8px; }

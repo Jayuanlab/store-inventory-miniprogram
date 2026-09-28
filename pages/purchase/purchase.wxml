@@ -1,0 +1,39 @@
+<view class="page">
+  <view class="page-head"><view class="page-title">{{plan ? '登记订货到货' : '进货与订货'}}</view><button class="text-btn" wx:if="{{caps.manageProducts}}" bindtap="go" data-url="/pages/products/products">新增商品</button></view>
+  <view class="error" wx:if="{{error}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+  <view class="segmented" wx:if="{{!plan}}"><view class="segment {{mode === 'receive' ? 'active' : ''}}" data-mode="receive" bindtap="mode">到货入库</view><view class="segment {{mode === 'plan' ? 'active' : ''}}" data-mode="plan" bindtap="mode">先订货</view></view>
+  <block wx:if="{{!planId && pendingPlans.length}}">
+    <view class="section-title pending-heading"><text>待收货（{{pendingPlans.length}}笔）</text><button class="text-btn" wx:if="{{pendingPlans.length > 3}}" bindtap="togglePlans">{{showAllPlans ? '收起' : '查看全部'}}</button></view>
+    <view class="surface pending-plans">
+      <block wx:for="{{pendingPlans}}" wx:key="id">
+        <view class="line pending-order" wx:if="{{showAllPlans || index < 3}}">
+          <view class="row"><view class="grow item-name">{{item.supplier}}</view><text class="badge {{item.statusText === '部分收货' ? 'pending' : 'muted'}}">{{item.statusText}}</text></view>
+          <view class="pending-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="id"><view class="item-name">{{line.name}}</view><view class="subtle">订货 {{line.quantity}}{{line.unit}} · 已收 {{line.received}}{{line.unit}} · <text class="primary">待收 {{line.remaining}}{{line.unit}}</text></view></view>
+          <view class="row"><view class="subtle grow">{{item.timeText}}</view><button class="text-btn receive-plan" data-url="{{item.receiptUrl}}" bindtap="go"><image class="small-icon" src="/assets/icons/package-plus.svg"/>到货入库</button></view>
+        </view>
+      </block>
+    </view>
+  </block>
+  <view class="field"><view class="row"><text class="label">供应商</text><button class="text-btn" bindtap="addSupplier" wx:if="{{!plan}}">新供货方</button></view><input wx:if="{{newSupplier}}" class="input" value="{{supplier}}" data-field="supplier" bindinput="field" placeholder="实际结算主体名称"/><picker wx:else range="{{suppliers}}" range-key="name" value="{{supplierIndex}}" bindchange="supplierChange" disabled="{{!!plan}}"><view class="picker-value">{{supplier || '选择供应商'}}</view></picker></view>
+  <view class="field" wx:if="{{plan}}"><text class="label">本次收货明细</text><picker range="{{plan.items}}" range-key="optionLabel" value="{{planItemIndex}}" bindchange="planLine"><view class="picker-value">{{plan.items[planItemIndex].optionLabel}}</view></picker></view>
+  <block wx:else><view class="search"><image class="icon" src="/assets/icons/search.svg"/><input value="{{keyword}}" bindinput="search" placeholder="搜索进货商品名称、编号"/></view><view class="surface" wx:if="{{keyword}}"><view class="line" wx:for="{{results}}" wx:key="skuId" data-id="{{item.skuId}}" bindtap="choose">{{item.name}}</view><view class="empty" wx:if="{{!results.length}}">未找到商品</view></view></block>
+  <view class="field"><text class="label">本次商品</text><view class="item-name">{{selected.name || '尚未选择'}}</view></view>
+  <view class="field-pair"><view class="field"><text class="label">{{mode === 'plan' ? '订货数量' : '本次实收数量'}}</text><input class="input" type="number" value="{{quantity}}" data-field="quantity" bindinput="field"/></view><view class="field"><text class="label">{{mode === 'plan' ? '约定单价' : '实际进货单价'}}（元）</text><input class="input" type="digit" value="{{costPrice}}" data-field="costPrice" bindinput="field"/></view></view>
+  <view class="field" wx:if="{{selected.trackSerial && mode === 'receive'}}"><view class="row"><text class="label">实收串码，每行一件</text><button class="icon-btn" aria-label="扫描串码" bindtap="scan"><image class="icon" src="/assets/icons/scan-line.svg"/></button></view><textarea class="input serial-input" value="{{serialText}}" data-field="serialText" bindinput="field" auto-height maxlength="-1"/></view>
+  <view class="row line"><text>{{mode === 'plan' ? '本次订货金额' : '本次入库金额'}}</text><text class="money">¥{{totalText}}</text></view>
+  <view class="plan-settlement" wx:if="{{planSettlement}}">
+    <view class="row settlement-line"><text class="subtle">本单可用预付款</text><text>¥{{planSettlement.availableText}}</text></view>
+    <view class="row settlement-line"><text class="subtle">本次自动抵用（预计）</text><text class="primary">¥{{planSettlement.appliedText}}</text></view>
+    <view class="row settlement-line"><text>本次待付（预计）</text><text class="money">¥{{planSettlement.dueText}}</text></view>
+    <view class="row settlement-line" wx:if="{{planSettlement.hasRemainder}}"><text class="subtle">抵用后剩余预付款</text><text>¥{{planSettlement.remainingText}}</text></view>
+  </view>
+  <block wx:if="{{!planId}}">
+    <view class="field"><text class="label">货款处理</text><radio-group class="pay-options" bindchange="payMode"><label><radio value="unpaid" checked="{{payMode === 'unpaid'}}" color="#147957"/>本次不付款</label><label wx:if="{{caps.supplierSettle}}"><radio value="paid" checked="{{payMode === 'paid'}}" color="#147957"/>{{mode === 'plan' ? '登记预付款' : '本次付款'}}</label><label wx:if="{{caps.supplierSettle && mode === 'receive' && advances.length}}"><radio value="advance" checked="{{payMode === 'advance'}}" color="#147957"/>抵用已有款项</label></radio-group></view>
+    <view class="field-pair" wx:if="{{payMode === 'paid'}}"><view class="field"><text class="label">{{mode === 'plan' ? '本次预付款' : '本次实际付款'}}（元）</text><input class="input" type="digit" value="{{paidAmount}}" data-field="paidAmount" bindinput="field"/></view><view class="field"><text class="label">实际付款账户</text><picker range="{{accounts}}" bindchange="account"><view class="picker-value">{{account}}</view></picker></view></view>
+    <block wx:if="{{payMode === 'advance'}}"><view class="field"><text class="label">抵用来源</text><picker range="{{advances}}" range-key="optionLabel" value="{{advanceIndex}}" bindchange="advance"><view class="picker-value">{{advances[advanceIndex].optionLabel}}</view></picker></view><view class="field"><text class="label">本次抵用（元）</text><input class="input" type="digit" value="{{advanceAmount}}" data-field="advanceAmount" bindinput="field"/></view></block>
+    <view class="field" wx:if="{{mode === 'receive' && payMode === 'unpaid'}}"><text class="label">约定付款日期（选填）</text><picker mode="date" value="{{dueDate}}" bindchange="dueDate"><view class="picker-value">{{dueDate || '未约定到期日'}}</view></picker></view>
+  </block>
+  <view class="actions"><button class="primary-btn" bindtap="submit" disabled="{{loading || submitting || !selected || (planId && !plan)}}" loading="{{submitting}}">{{mode === 'plan' ? '确认订货' : '确认入库'}}</button></view>
+  <view class="row settlement-link" wx:if="{{plan && caps.supplierView}}"><button class="text-btn" bindtap="go" data-url="/pages/supplier-detail/supplier-detail?id={{supplierId}}"><image class="small-icon" src="/assets/icons/receipt-text.svg"/>查看供应商往来</button></view>
+  <view class="section-title">最近入库</view><view class="surface"><view class="line row" wx:for="{{purchases}}" wx:key="id"><view class="grow"><view class="item-name">{{item.names}}</view><view class="subtle">{{item.supplier}} · {{item.timeText}}</view></view><view class="right"><view class="money">¥{{item.amountText}}</view><view class="subtle" wx:if="{{caps.supplierView}}">待结 ¥{{item.dueText}}</view></view></view><view class="empty" wx:if="{{!purchases.length}}">暂无入库记录</view></view>
+</view>

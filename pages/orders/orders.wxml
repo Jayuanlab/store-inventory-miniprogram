@@ -1,0 +1,23 @@
+<view class="page">
+ <view class="page-head"><view class="page-title">{{selected ? '销售单详情' : '销售单据'}}</view><button class="text-btn" wx:if="{{selected}}" bindtap="back">全部单据</button></view>
+ <view class="error" wx:if="{{error && !returning}}">{{error}}<button class="text-btn" bindtap="reload">重试</button></view>
+ <block wx:if="{{!selected}}">
+ <view class="search"><image class="icon" src="/assets/icons/search.svg"/><input value="{{keyword}}" bindinput="search" bindconfirm="find" confirm-type="search" placeholder="商品、串码、单号、销售人"/><button class="text-btn" bindtap="find">查询</button></view>
+ <view class="surface"><view class="line row" wx:for="{{orders}}" wx:key="id" data-id="{{item.id}}" bindtap="select"><view class="grow"><view class="item-name">{{item.names}}</view><view class="subtle">{{item.salesperson || item.operator}} · {{item.timeText}}</view><text class="badge muted">{{item.statusText}}</text></view><view class="right money">¥{{item.amountText}}</view></view><view class="empty" wx:if="{{!orders.length}}">{{loading ? '正在读取单据' : '暂无匹配销售单'}}</view></view>
+ </block>
+ <block wx:else>
+ <view class="surface"><view class="line row"><view><view class="subtle">销售金额</view><view class="metric-value">¥{{selected.amountText}}</view></view><text class="badge">{{selected.statusText}}</text></view>
+ <view class="line"><view class="row"><text class="subtle">销售人</text><text>{{selected.salesperson || selected.operator}}</text></view><view class="row"><text class="subtle">录单人</text><text>{{selected.operator}}</text></view><view class="row"><text class="subtle">收款方式</text><text>{{selected.paymentMethod}}</text></view><view class="row"><text class="subtle">时间</text><text>{{selected.timeText}}</text></view></view></view>
+ <view class="section-title">商品明细</view><view class="surface"><view class="line" wx:for="{{selected.items}}" wx:key="id"><view class="row"><view class="grow item-name">{{item.name}}</view><text>¥{{item.amountText}}</text></view><view class="subtle">¥{{item.salePrice}} × {{item.quantity}} · 已退 {{item.returnedQuantity || 0}}</view><view class="mono" wx:if="{{item.serialNo}}">{{item.serialNo}}</view><view class="subtle" wx:for="{{item.materials}}" wx:for-item="material" wx:key="skuId">耗材：{{material.name}} × {{material.quantity}}</view></view></view>
+ <view class="row line" wx:if="{{caps.profit}}"><text>销售原始毛利</text><text class="money primary">¥{{selected.profitText}}</text></view>
+ <block wx:if="{{caps.profit && selected.costAdjustments.length}}"><view class="row line"><text>后续成本调整影响</text><text class="right money blue">¥{{selected.adjustmentText}}</text></view><view class="row line"><text>原单毛利加后续调整</text><text class="right money">¥{{selected.adjustedProfitText}}</text></view></block>
+ <view class="subtle mono">{{selected.id}}</view>
+ <view class="actions" wx:if="{{caps.returnSale && selected.status !== 'returned'}}"><button class="danger-btn" bindtap="returnOpen">原单退货 / 退款</button></view>
+ </block>
+ <view class="sheet-backdrop" wx:if="{{returning}}" bindtap="close"><view class="sheet" catchtap="noop"><view class="page-head"><view class="page-title">退货退款</view><button class="icon-btn" bindtap="close"><image class="icon" src="/assets/icons/x.svg"/></button></view>
+ <view class="line" wx:for="{{returnItems}}" wx:key="id"><view class="item-name">{{item.name}}</view><view class="row"><text class="subtle">可退 {{item.remaining}} 件</text><input class="input qty-input" type="number" value="{{item.returnQty}}" data-index="{{index}}" bindinput="qty"/></view></view>
+ <view class="field"><text class="label">退货原因</text><input class="input" value="{{reason}}" bindinput="reason"/></view><view class="field"><text class="label">实际退款方式</text><picker range="{{accounts}}" bindchange="account"><view class="picker-value">{{account}}</view></picker></view>
+ <view class="subtle">实物按可再次销售入库；维修退款不退回已消耗材料。</view>
+ <view class="error sheet-error" wx:if="{{error}}">{{error}}</view><view class="actions"><button class="danger-btn" bindtap="submitReturn" disabled="{{submitting}}" loading="{{submitting}}">确认退货及已退款</button></view>
+ </view></view>
+</view>

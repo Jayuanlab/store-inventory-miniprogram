@@ -1,0 +1,13 @@
+.serial-input { min-height: 100px; }
+.pay-options { display: flex; flex-wrap: wrap; gap: 12px; }
+.pay-options label { display: flex; align-items: center; min-height: 36px; font-size: 13px; }
+.pending-heading { margin-top: 0; }
+.pending-plans { margin-bottom: 20px; }
+.pending-item { margin-top: 8px; }
+.receive-plan { display: flex; align-items: center; gap: 6px; min-height: 44px; flex-shrink: 0; }
+.pending-order .badge { flex-shrink: 0; }
+.plan-settlement { padding: 10px 0; border-bottom: 1px solid #e2e8e4; }
+.settlement-line { min-height: 34px; padding: 4px 0; }
+.settlement-line > text:last-child { text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; max-width: 48%; }
+.settlement-link { justify-content: flex-end; margin-top: 8px; }
+.settlement-link button { display: flex; align-items: center; gap: 6px; min-height: 44px; }
